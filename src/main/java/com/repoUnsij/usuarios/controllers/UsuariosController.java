@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -100,4 +99,31 @@ public class UsuariosController {
             return new ResponseEntity<>(new ErrorResponse(404, "Usuario no encontrado para eliminar"), HttpStatus.NOT_FOUND);
         }
     }
-}
+
+	@GetMapping("/desactivar/{id}")
+	public ResponseEntity<?> desactivarCuenta(@PathVariable Long id) {
+		try {
+			Optional<Usuarios> usuario = usuariosService.getUsuarioById(id);
+
+			if (usuario.isEmpty()) {
+				return new ResponseEntity<>(new ErrorResponse(404, "No se encontró al usuario"), HttpStatus.NOT_FOUND);
+			}
+
+			Usuarios usuarioUpdate = usuario.get();
+			usuarioUpdate.setActivo(false);
+
+			Optional<Usuarios> response = usuariosService.updateUsuario(id, usuarioUpdate);
+
+			if (response.isPresent()) {
+				return new ResponseEntity<>(response.get(), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(new ErrorResponse(500, "No se pudo actualizar el usuario"), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+
+		} catch (Exception e) {
+			System.err.println(e);
+			ErrorResponse error = new ErrorResponse(500, "Error interno del servidor");
+			return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	}
