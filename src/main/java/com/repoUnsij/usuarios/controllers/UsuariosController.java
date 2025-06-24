@@ -102,28 +102,36 @@ public class UsuariosController {
 
 	@GetMapping("/desactivar/{id}")
 	public ResponseEntity<?> desactivarCuenta(@PathVariable Long id) {
-		try {
-			Optional<Usuarios> usuario = usuariosService.getUsuarioById(id);
+		return cambiarEstadoCuenta(id, false);
+	}
 
-			if (usuario.isEmpty()) {
-				return new ResponseEntity<>(new ErrorResponse(404, "No se encontró al usuario"), HttpStatus.NOT_FOUND);
-			}
+	@GetMapping("/activar/{id}")
+	public ResponseEntity<?> activarCuenta(@PathVariable Long id) {
+		return cambiarEstadoCuenta(id, true);
+	}
 
-			Usuarios usuarioUpdate = usuario.get();
-			usuarioUpdate.setActivo(false);
+	private ResponseEntity<?> cambiarEstadoCuenta(Long id, boolean estadoActivo) {
+	try {
+		Optional<Usuarios> usuario = usuariosService.getUsuarioById(id);
 
-			Optional<Usuarios> response = usuariosService.updateUsuario(id, usuarioUpdate);
-
-			if (response.isPresent()) {
-				return new ResponseEntity<>(response.get(), HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(new ErrorResponse(500, "No se pudo actualizar el usuario"), HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-
-		} catch (Exception e) {
-			System.err.println(e);
-			ErrorResponse error = new ErrorResponse(500, "Error interno del servidor");
-			return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+		if (usuario.isEmpty()) {
+			return new ResponseEntity<>(new ErrorResponse(404, "No se encontró al usuario"), HttpStatus.NOT_FOUND);
 		}
+
+		Usuarios usuarioUpdate = usuario.get();
+		usuarioUpdate.setActivo(estadoActivo);
+
+		Optional<Usuarios> response = usuariosService.updateUsuario(id, usuarioUpdate);
+
+		if (response.isPresent()) {
+			return new ResponseEntity<>(response.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(new ErrorResponse(500, "No se pudo actualizar el usuario"), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	} catch (Exception e) {
+		System.err.println(e);
+		ErrorResponse error = new ErrorResponse(500, "Error interno del servidor");
+		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	}
+}
+}

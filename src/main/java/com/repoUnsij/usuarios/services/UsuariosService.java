@@ -31,11 +31,13 @@ public class UsuariosService {
 
     // Actualizar usuario por id
     public Optional<Usuarios> updateUsuario(Long id, Usuarios usuarioDetails) {
+        
         return usuariosRepository.findById(id).map(usuario -> {
             usuario.setNombre(usuarioDetails.getNombre());
             usuario.setCorreo(usuarioDetails.getCorreo());
-            usuario.setContraseña(usuario.getContraseña());
-            usuario.setActivo(usuario.getActivo());
+            usuario.setContraseña(usuarioDetails.getContraseña());
+            usuario.setActivo(usuarioDetails.getActivo());
+            usuario.setRol(usuarioDetails.getRol());
 
             return usuariosRepository.save(usuario);
         });
