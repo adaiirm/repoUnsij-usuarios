@@ -2,6 +2,7 @@ package com.repoUnsij.usuarios.entites;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
@@ -27,6 +28,6 @@ public class Roles {
     private String nombre;
     
     @OneToMany(mappedBy = "rol")
-    @JsonManagedReference
+    @JsonBackReference
     private List<Usuarios> usuarios;
 }

@@ -30,6 +30,5 @@ public class Usuarios {
 
     @ManyToOne
     @JoinColumn(name = "rol_id")
-    @JsonBackReference
     private Roles rol;
 }
