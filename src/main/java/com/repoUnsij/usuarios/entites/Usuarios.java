@@ -25,7 +25,7 @@ public class Usuarios {
     private Long id;
     private String nombre;
     private String correo;
-    private String contraseña;
+    private String contrasenia;
     private Boolean activo;
 
     @ManyToOne

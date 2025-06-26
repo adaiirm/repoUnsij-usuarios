@@ -35,7 +35,7 @@ public class UsuariosService {
         return usuariosRepository.findById(id).map(usuario -> {
             usuario.setNombre(usuarioDetails.getNombre());
             usuario.setCorreo(usuarioDetails.getCorreo());
-            usuario.setContraseña(usuarioDetails.getContraseña());
+            usuario.setContrasenia(usuarioDetails.getContrasenia());
             usuario.setActivo(usuarioDetails.getActivo());
             usuario.setRol(usuarioDetails.getRol());
 
