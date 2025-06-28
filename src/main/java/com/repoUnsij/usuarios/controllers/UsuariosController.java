@@ -65,8 +65,11 @@ public class UsuariosController {
 	@PostMapping
     public ResponseEntity<?> createUsuario(@RequestBody Usuarios usuario) {
         try {
-            Usuarios nuevoUsuario = usuariosService.createUsuario(usuario);
-            return new ResponseEntity<>(nuevoUsuario, HttpStatus.CREATED);
+            Optional<Usuarios> nuevoUsuario = usuariosService.createUsuarioIfCorreoNotExists(usuario);
+            if (nuevoUsuario.isEmpty()) {
+                return new ResponseEntity<>(new ErrorResponse(400, "El correo ya ha sido registrado anteriormente"), HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(nuevoUsuario.get(), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(new ErrorResponse(500, "Error al crear usuario"), HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -25,8 +25,12 @@ public class UsuariosService {
     }
 
     // Crear un usuario
-    public Usuarios createUsuario(Usuarios usuario) {
-        return usuariosRepository.save(usuario);
+    public Optional<Usuarios> createUsuarioIfCorreoNotExists(Usuarios usuario) {
+        Optional<Usuarios> existente = usuariosRepository.findByCorreo(usuario.getCorreo());
+        if (existente.isPresent()) {
+            return Optional.empty();
+        }
+        return Optional.of(usuariosRepository.save(usuario));
     }
 
     // Actualizar usuario por id
