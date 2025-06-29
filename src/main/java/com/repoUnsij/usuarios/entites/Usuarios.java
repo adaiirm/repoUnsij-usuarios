@@ -29,6 +29,10 @@ public class Usuarios {
     private Boolean activo;
 
     @ManyToOne
+    @JoinColumn(name = "carrera_id")
+    private Carreras carrera;
+
+    @ManyToOne
     @JoinColumn(name = "rol_id")
     private Roles rol;
 }
